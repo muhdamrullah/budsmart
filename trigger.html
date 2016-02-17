@@ -1,7 +1,8 @@
 <html>
   <!--meta http-equiv="refresh" content="20"-->
 <head>
-<link rel="stylesheet" type="text/css" href="styles/budweiser.css"
+<link rel="stylesheet" type="text/css" href="styles/animate.css"/>
+<link rel="stylesheet" type="text/css" href="styles/budweiser.css"/>
 </head>
   
 <body>   
@@ -12,8 +13,23 @@
 <img id="img_snapshot" src="" class="hidden"/>
     
 <div class="container">
-<img class="center" id="advertisement" src="introBud.gif"/>
-</div>           
+  <img class="center" id="advertisement" src="img/bg.gif"/>
+  <div class="beer_container">
+    <img id="male_millenial" src="img/bud_200x500.png" />
+    <img id="female_millenial" src="img/corona_200x500.png"/>
+    <img id="male_traditional" src="img/stella_200x500.png"/>
+    <img id="female_traditional" src="img/hoegaarden_200x500.png"/>
+  </div>
+  <div class="ico_container">
+    <img id="ico_fb" src="img/ico_fb.png" style="margin-right: 15px;"/>
+    <img id="ico_twit" src="img/ico_twit.png" style="margin-left: 15px;"/>
+  </div>
+</div>
+
+<audio src="/mp3/male_millenial.mp3"/>
+<audio src="/mp3/female_millenial.mp3"/>
+<audio src="/mp3/male_traditional.mp3"/>
+<audio src="/mp3/female_traditional.mp3"/>
     
 <!-- Load jquery and FACE libraries -->    
 <script src="scripts/FACE-1.0.js"></script>

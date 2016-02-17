@@ -6,86 +6,102 @@ var app_key   = '';
 
 var ajaxRequest = new XMLHttpRequest();
 
+var bottles = ['#male_millenial', '#female_millenial', '#male_traditional', '#female_traditional'];
+
+var shouldSendRequest = true;
+
+var requestInterval;
+
 function success( result ) {
 
-        if( result.persons.length > 0 ) {
+  if (!shouldSendRequest)
+    return;
 
-          age        = result.persons[0].age.value;
-          
-	  gender     = result.persons[0].gender.value;
-          
-	  confidence = result.persons[0].gender.confidence;
-         
-          
-		if ( gender == "Male" && confidence > 50  && confidence % 2 == 1)
-            { $('#advertisement').attr( 'src', 'introBud.gif' );
-		ajaxRequest.open("GET", "http://172.20.10.4:3000/open", true);
-		ajaxRequest.send();
-	    }
-          
-		else if ( gender == "Female" && confidence > 50 && confidence % 2 == 1)
-            { $('#advertisement').attr( 'src', 'introBud.gif' );
-                ajaxRequest.open("GET", "http://172.20.10.4:3000/open", true);
-                ajaxRequest.send();
-            }
+  if( result.persons.length > 0 ) {
+    age        = result.persons[0].age.value;
+    gender     = result.persons[0].gender.value;
+    confidence = result.persons[0].gender.confidence;
 
-		else if ( gender == "Male" && confidence > 50 && confidence % 2 == 0)
-            { $('#advertisement').attr( 'src', 'introBud.gif' );
-                ajaxRequest.open("GET", "http://172.20.10.4:3000/open", true);
-                ajaxRequest.send();
-            }
-  
-		else if ( gender == "Female" && confidence > 50 && confidence % 2 == 0)
-            { $('#advertisement').attr( 'src', 'introBud.gif' );
-                ajaxRequest.open("GET", "http://172.20.10.4:3000/open", true);
-                ajaxRequest.send();
-            }
+    if (confidence < 50) 
+      return
 
-		else $('#advertisement').attr( 'src', 'generic.jpeg' )
+      // return $('#advertisement').attr( 'src', 'generic.jpeg' )
+
+    // ajaxRequest.open("GET", "http://172.20.10.4:3000/open", true);
+    // ajaxRequest.send();
+    // $('#advertisement').attr( 'src', 'img/introBud.gif' );
+    if ( gender == "Male") {
+      if (age < 30)
+        animateBottle(0)
+      else
+        animateBottle(2);
+    } else {
+      if (age < 30)
+        animateBottle(1);
+      else
+        animateBottle(3);
+    }
 	}
 }
   
-      
+function animateBottle (index) {
+  shouldSendRequest = false;
+  clearInterval(requestInterval);
+  $('audio')[index].play();
+  $('.ico_container').css('display', 'flex').addClass('animated fadeIn');
+  for (var i = 0, l = bottles.length; i < l; i++) {
+    if (i == index) {
+      $(bottles[i]).css('animation-iteration-count', '3').addClass('animated bounce');
+    } else {
+      $(bottles[i]).addClass('animated fadeOut');
+    }
+  }
+}     
 
 function failure( error ) {
-
-        alert( error );
-      }
+  // alert( error );
+}
   
       
 function sendDetectRequest() {
-
-        var img = document.querySelector( "#img_snapshot" );
-        
+  var img = document.querySelector( "#img_snapshot" );
 	if( img.naturalWidth == 0 ||  img.naturalHeight == 0 ) // Check if a snapshot has been taken
-          return;
-        
+    return;
 	var imgBlob = FACE.util.dataURItoBlob( img.src );
-        
 	FACE.sendImage( imgBlob, success, failure, app_key, client_id, 'age,gender,mood' );
-      }
+}
   
 
 function startCapture() {
-
-        FACE.webcam.startPlaying( "webcam_preview" );
-        
-setInterval( function()
-        {
-
-          FACE.webcam.takePicture( "webcam_preview", "img_snapshot" );
-          
-sendDetectRequest();
-        },
-        7000 );
-      }
+  FACE.webcam.startPlaying( "webcam_preview" );
+  requestInterval = setInterval( function () {
+    FACE.webcam.takePicture( "webcam_preview", "img_snapshot" );
+    sendDetectRequest();
+  }, 5000);
+}
 
       
 // Trigger the start
-      $( document ).ready( function() {
-        if( client_id =='' ) {
-          alert( 'Please specify your keys in the source' );
-        } else {
-          startCapture();
-        }
-      });
+$( document ).ready( function() {
+  if( client_id =='' ) {
+    alert( 'Please specify your keys in the source' );
+  } else {
+    startCapture();
+  }
+  $(document).keypress(function (event) {
+    console.log("WTF");
+    if (event.which > 48 && event.which < 53) {
+      animateBottle(event.which - 49);
+    }
+  })
+  $('audio').on('pause', function (target) {
+    // alert('playback ended')
+    shouldSendRequest = true;
+    $('.beer_container').children().css('animation-iteration-count', '1').removeClass('animated fadeOut bounce');
+    $('.ico_container').css('display', 'none').removeClass('animated fadeIn');
+    requestInterval = setInterval( function () {
+      FACE.webcam.takePicture( "webcam_preview", "img_snapshot" );
+      sendDetectRequest();
+    }, 5000);
+  });
+});
