@@ -1,0 +1,19 @@
+body { overflow: hidden; } 
+.hidden { 
+display : none; 
+}
+      
+.container {
+ width : 100%; 
+}
+       
+.center {
+ display : block;
+ margin: 0;
+ height: 110%;
+ width: 105%;
+ position: absolute;
+ right: -5;
+ top: -5;
+ bottom: -20;
+}
