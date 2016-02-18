@@ -48,3 +48,19 @@ display : none;
   animation-duration: 5s;
   animation-iteration-count: infinite;
 }
+
+.beer-comment {
+  position: absolute;
+  width: 400px;
+  height: 500px;
+  font-family: 'Raleway', sans-serif;
+  text-align: center;
+  background-color: rgba(50, 50, 50, 0.8);
+  color: white;
+  line-height: 50px;
+  border-radius: 30px;
+  font-size: 30px;
+  display: none;
+  justify-content: center;
+  flex-direction: column;
+}

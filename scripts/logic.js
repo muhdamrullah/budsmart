@@ -7,7 +7,7 @@ var app_key   = '';
 var ajaxRequest = new XMLHttpRequest();
 
 var bottles = ['#male_millenial', '#female_millenial', '#male_traditional', '#female_traditional'];
-
+var comments = ['#comment-male-millenial', '#comment-female-millenial', '#comment-male-traditional', '#comment-female-traditional'];
 var shouldSendRequest = true;
 
 var requestInterval;
@@ -52,6 +52,7 @@ function animateBottle (index) {
   }, 5000);
   shouldSendRequest = false;
   clearInterval(requestInterval);
+  $(comments[index]).css('display', 'flex').addClass('animated fadeIn');
   $('.ico_container').css('display', 'flex').addClass('animated fadeIn');
   for (var i = 0, l = bottles.length; i < l; i++) {
     if (i == index) {
@@ -100,6 +101,7 @@ $( document ).ready( function() {
   $('audio').on('pause', function (target) {
     // alert('playback ended')
     $('#status').removeClass('transparent').html('Detecting ...');
+    $('.beer-comment').css('display', 'none').removeClass('animated fadeIn');
     shouldSendRequest = true;
     $('.beer_container').children().css('animation-iteration-count', '1').removeClass('animated fadeOut bounce');
     $('.ico_container').css('display', 'none').removeClass('animated fadeIn');
