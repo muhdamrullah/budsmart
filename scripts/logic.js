@@ -45,9 +45,13 @@ function success( result ) {
 }
   
 function animateBottle (index) {
+  $('#status').html('Curating your playlist');
+  setTimeout(function () {
+    $('#status').addClass('transparent');
+    $('audio')[index].play();
+  }, 5000);
   shouldSendRequest = false;
   clearInterval(requestInterval);
-  $('audio')[index].play();
   $('.ico_container').css('display', 'flex').addClass('animated fadeIn');
   for (var i = 0, l = bottles.length; i < l; i++) {
     if (i == index) {
@@ -89,13 +93,13 @@ $( document ).ready( function() {
     startCapture();
   }
   $(document).keypress(function (event) {
-    console.log("WTF");
     if (event.which > 48 && event.which < 53) {
       animateBottle(event.which - 49);
     }
   })
   $('audio').on('pause', function (target) {
     // alert('playback ended')
+    $('#status').removeClass('transparent').html('Detecting ...');
     shouldSendRequest = true;
     $('.beer_container').children().css('animation-iteration-count', '1').removeClass('animated fadeOut bounce');
     $('.ico_container').css('display', 'none').removeClass('animated fadeIn');
